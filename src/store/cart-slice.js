@@ -6,6 +6,10 @@ const cartSlice = createSlice({
     items: [],
     totalQuantity: 0,
   },
+  // Remember that reducers MUST be side-effect-free, synchronous functions
+  // That means we CANNOT send http requests from reducers
+  // Bear in mind that as we're using a "dumb" backend, we need to handle any database changes in the front-end before submitting to the backend
+  // In an application (such as a Rails app) where we can do the logic on the backend and fetch the result, we would not do this here
   reducers: {
     addItemToCart(state, action) {
       const newItem = action.payload;
