@@ -5,6 +5,7 @@ const cartSlice = createSlice({
   initialState: {
     items: [],
     totalQuantity: 0,
+    changed: false,
   },
   // Remember that reducers MUST be side-effect-free, synchronous functions
   // That means we CANNOT send http requests from reducers
@@ -19,6 +20,7 @@ const cartSlice = createSlice({
       const newItem = action.payload;
       const existingItem = state.items.find(item => item.id === newItem.id);
       state.totalQuantity++;
+      state.changed = true;
       if (!existingItem) {
         state.items.push({ // This (mutating the state) is ok with Redux Toolkit (it wouldn't be with just Redux)
           id: newItem.id,
@@ -36,6 +38,7 @@ const cartSlice = createSlice({
       const id = action.payload;
       const existingItem = state.items.find(item => item.id === id);
       state.totalQuantity--;
+      state.changed = true;
       if (existingItem.quantity === 1) {
         state.items = state.items.filter(item => item.id !== id); // Keep all items that are not equal to 'id'
       } else {
