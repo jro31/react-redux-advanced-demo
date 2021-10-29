@@ -1,0 +1,14 @@
+Based on *'Section 19: Advanced Redux'* of Academind's *['React - The Complete Guide'](https://acad.link/reactjs)* course, this repo uses `Redux Toolkit` and has commits of examples of:
+
+* Creating a store with a state slice (`uiSlice`) in a separate file, which sets the state for `cartIsVisible` when a button is clicked, and conditionally displays the cart depending on if `cartIsVisible` is true or false - [Commit link](https://github.com/jro31/react-redux-advanced-demo/commit/9abc8e5de19473f8e7fff9ac3d0e0e6cdaedfa7f)
+* Adding another state slice (`cartSlice`), which handles adding items to and removing items from the cart, and hook this up so that the add/remove buttons work, and correctly display the cart as it updates - [Commit link](https://github.com/jro31/react-redux-advanced-demo/commit/d6a73389a757deafc4b7163158331d0705ba6175)
+* Using the `useEffect()` hook and the `fetch()` API to send a 'PUT' request to the backend, *after* the Redux store has updated - [Commit link](https://github.com/jro31/react-redux-advanced-demo/commit/0ca57cc62d0fdf33991e5f806c65d5c676cd5980)
+* Adding a Redux-related side-effect *inside* a component (the `App` component) by adding a `showNotification` action to the `uiSlice` reducer, updating this state slice through the 'PUT' request's phases of `pending`, `success` and `error`, and displaying the notification's title and message to the user as it gets updated - [Commit link](https://github.com/jro31/react-redux-advanced-demo/commit/c084a73633664386ff70402e06f2e3fc91d1327e)
+* Creating an '**action creator**' in 'cart-slice.js', and moving the async/side-effect code (added in the previous commit) *from* the `App` component, into this action creator - [Commit link](https://github.com/jro31/react-redux-advanced-demo/commit/ac74aa2f454c0a93ba0f6ed1a05af5089901bbb1)
+  * As reducers **must** be side-effect-free, synchronous functions, these two commits are the two options for running asynchronous/side-effect code. It must be:
+    * In a component
+    * In an action creator
+* Moving the action creator (from the last commit) into a separate file, and adding a new `fetchCartData` action creator to this file, then running `fetchCartData()` each time that the `App` component loads - [Commit link](https://github.com/jro31/react-redux-advanced-demo/commit/73c113fb4b4236311efd20a11a50afae2dd86e49)
+* Fixing 2 bugs: - [Commit link](https://github.com/jro31/react-redux-advanced-demo/commit/d740432fb9106db658cb78883d6b615c824d4964)
+  1. Handling there being no items in the cart, and returning an empty array instead of `undefined`
+  2. Adding a `changed` attribute to the cart-slice state, which is false initially, and which only changes to true once items are added to or removed from the cart. This is then used to prevent `dispatch(sendCartData(cart));` from running when the data is fetched from the backend when the page first loads.
