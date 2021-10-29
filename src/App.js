@@ -5,7 +5,7 @@ import Cart from './components/Cart/Cart';
 import Layout from './components/Layout/Layout';
 import Products from './components/Shop/Products';
 import Notification from './components/UI/Notification';
-import { sendCartData } from './store/cart-slice';
+import { sendCartData, fetchCartData } from './store/cart-actions';
 
 let isInitial = true; // As this is set outside of the 'App' component, it will not be reinitialised when 'App' is re-executed
 
@@ -16,6 +16,10 @@ function App() {
   const notification = useSelector(state => state.ui.notification);
 
   useEffect(() => {
+    dispatch(fetchCartData());
+  }, [dispatch]);
+
+  useEffect(() => {
     if (isInitial) {
       isInitial = false;
       return;
@@ -24,6 +28,12 @@ function App() {
     dispatch(sendCartData(cart)); // We are dispatching a function that returns another function
     // Redux Toolkit will see that we are doing this, and will execute the returned function for us
   }, [cart, dispatch]);
+  // Because this effect is run whenever the 'cart' changes,
+  // and because the 'dispatch(fetchCartData());' line (above) is run whenever the page loads,
+  // which in turn calls 'dispatch(cartActions.replaceCart(cartData));' (in 'cart-actions.js'),
+  // which then triggers this effect to run again, what we're now doing is calling 'dispatch(sendCartData(cart));'
+  // every time that the page loads (which we don't want to do).
+  // This will be fixed in the next commit, just be aware that it is a bug that exists now, if you're ever looking at this code again.
 
   return (
     <Fragment>
